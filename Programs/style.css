@@ -1,0 +1,89 @@
+      /* General styles for the folder items */
+    
+          .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header, .footer {
+            background-color: #0274be;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+    .folder-item {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+
+    .folder-item:hover {
+      background-color: #f0f0f0;
+    }
+    
+    /* Folder icon style */
+    .folder-icon {
+      width: 24px;
+      height: 24px;
+      margin-right: 10px;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>');
+      background-size: cover;
+    }
+
+    /* Title for the folder */
+    .folder-title {
+      flex-grow: 1;
+    }
+
+    /* Button style */
+    .download-button {
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+      margin-left: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    /* Optional: Adjust margin between button and folder title */
+    .folder-item .download-button {
+      margin-left: 20px;
+    }
+    a{ 
+      color: azure;
+      text-decoration:none;}
+    a:hover{ text-decoration:none;}
+    a:active{ text-decoration:none;color:white;}
+    /* Bootstrap grid adjustments for responsiveness */
+    @media (max-width: 767px) {
+      .folder-item {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .folder-title, .download-button {
+        margin: 10px 0;
+      }
+          a{ text-decoration:none;}
+    a:hover{ text-decoration:none;}
+    a:active{ text-decoration:none;color:white;}
+    }
+
+    /* For larger screens, you can modify the layout to keep them in a row */
+    @media (min-width: 768px) {
+      .folder-item {
+        flex-direction: row;
+      }
+          a{ text-decoration:none;}
+    a:hover{ text-decoration:none;}
+    a:active{ text-decoration:none;color:white;}
+    } 

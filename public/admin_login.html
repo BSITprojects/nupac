@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+</head>
+<body>
+    <h1>Admin Login</h1>
+
+    <form id="login-form">
+        <input type="text" id="username" placeholder="Username" required><br><br>
+        <input type="password" id="password" placeholder="Password" required><br><br>
+        <button type="submit">Login</button>
+    </form>
+
+    <p id="error-message" style="color: red; display: none;">Invalid username or password.</p>
+
+    <script>
+        // Handle login form submission
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Hardcoded credentials for testing
+            const adminUsername = 'admin';
+            const adminPassword = 'password123';
+
+            if (username === adminUsername && password === adminPassword) {
+                // Store logged-in status in sessionStorage
+                sessionStorage.setItem('logged_in', 'true');
+                window.location.href = 'admin_panel.html'; // Redirect to admin panel
+            } else {
+                document.getElementById('error-message').style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
