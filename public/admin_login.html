@@ -4,36 +4,168 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        /* Background styles */
+        body {
+            background-color: #50E3C2;
+            background-image: 
+                radial-gradient(at 47% 33%, hsl(162.00, 77%, 40%) 0, transparent 59%), 
+                radial-gradient(at 82% 65%, hsl(198.00, 100%, 50%) 0, transparent 55%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+        
+        /* Glassmorphism effect for the login card */
+        .card {
+            backdrop-filter: blur(14px) saturate(85%);
+            -webkit-backdrop-filter: blur(14px) saturate(85%);
+            background-color: rgba(255, 255, 255, 0.46);
+            border-radius: 12px;
+            border: 1px solid rgba(209, 213, 219, 0.3);
+            padding: 30px;
+            text-align: center;
+            width: 300px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+        }
+        
+        .card:hover {
+            transform: scale(1.05);
+            border: solid 1px #8d8d8d;
+        }
+        
+        h1 {
+            color: white;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            font-size: 1.3rem;
+            font-weight: bolder;
+        }
+        
+        h1:hover {
+            color: #003366;
+        }
+        
+        .input-field {
+            position: relative;
+            width: 100%;
+        }
+
+        .input-field label {
+            position: absolute;
+            color: #8d8d8d;
+            pointer-events: none;
+            background-color: transparent;
+            left: 15px;
+            transform: translateY(0.6rem);
+            transition: all 0.3s ease;
+        }
+        
+        .input-field input {
+            padding: 10px 15px;
+            font-size: 1rem;
+            border-radius: 8px;
+            border: solid 1px #8d8d8d;
+            letter-spacing: 1px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .input-field input:focus,
+        .input-field input:valid {
+            outline: none;
+            border: solid 1px #0034de;
+        }
+        
+        .input-field input:focus ~ label,
+        .input-field input:valid ~ label {
+            transform: translateY(-51%) translateX(-10px) scale(0.8);
+            background-color: #fff;
+            padding: 0px 5px;
+            color: #0034de;
+            font-weight: bold;
+            letter-spacing: 1px;
+            border: none;
+            border-radius: 100px;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            border-radius: 10px;
+            border: solid 1px #1034aa;
+            border-bottom: solid 1px #90c2ff;
+            background: linear-gradient(135deg, #0034de, #006eff);
+            color: #fff;
+            font-weight: bolder;
+            transition: all 0.2s ease;
+            box-shadow: 0px 2px 3px #000d3848, inset 0px 4px 5px #0070f0,
+                inset 0px -4px 5px #002cbb;
+            cursor: pointer;
+        }
+        
+        button:active {
+            box-shadow: inset 0px 4px 5px #0070f0, inset 0px -4px 5px #002cbb;
+            transform: scale(0.995);
+        }
+        
+        #error-message {
+            color: red;
+            margin-top: 10px;
+            display: none;
+            transition: opacity 0.3s;
+        }
+    </style>
 </head>
 <body>
-    <h1>Admin Login</h1>
-
-    <form id="login-form">
-        <input type="text" id="username" placeholder="Username" required><br><br>
-        <input type="password" id="password" placeholder="Password" required><br><br>
-        <button type="submit">Login</button>
-    </form>
-
-    <p id="error-message" style="color: red; display: none;">Invalid username or password.</p>
-
+    <div class="card">
+        <h1>Admin Login</h1>
+        <form id="login-form">
+            <div class="input-field mb-2">
+                <input type="text" id="username" required>
+                <label for="username">Username</label>
+            </div>
+            <div class="input-field mb-2">
+                <input type="password" id="password" required>
+                <label for="password">Password</label>
+            </div>
+            <div class="btn-container">
+                <button type="submit">Login</button>
+            </div>
+        </form>
+        <p id="error-message">Invalid username or password.</p>
+    </div>
+    
     <script>
-        // Handle login form submission
         document.getElementById('login-form').addEventListener('submit', function(event) {
             event.preventDefault();
 
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('error-message');
 
             // Hardcoded credentials for testing
             const adminUsername = 'admin';
             const adminPassword = 'f@qMc8nnqDkdTyJ';
 
             if (username === adminUsername && password === adminPassword) {
-                // Store logged-in status in sessionStorage
                 sessionStorage.setItem('logged_in', 'true');
-                window.location.href = 'admin_panel.html'; // Redirect to admin panel
+                window.location.href = 'admin_panel.html';
             } else {
-                document.getElementById('error-message').style.display = 'block';
+                errorMessage.style.display = 'block';
             }
         });
     </script>
