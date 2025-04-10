@@ -1,275 +1,240 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel
-    </title>
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            padding-top: 70px; /* Adjusted to avoid navbar overlap */
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NUPAC Admin Panel</title>
 
-        .container {
-            max-width: 900px;
-        }
+  <!-- Bootstrap & Icons -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
 
-        .card {
-            margin-bottom: 20px;
-        }
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      padding-top: 70px;
+    }
 
-        h1, h2 {
-            color: #343a40;
-        }
+    .navbar-custom {
+      background-color: #0056b3;
+    }
 
-        table th, table td {
-            text-align: center;
-        }
+    .navbar-custom .navbar-brand,
+    .navbar-custom .nav-link {
+      color: #fff;
+    }
 
-        table th {
-            background-color: #007bff; /* Header color */
-            color: white;
-        }
+    .navbar-custom .nav-link:hover {
+      color: #ffd700;
+    }
 
-        table td {
-            vertical-align: middle;
-        }
+    .card {
+      margin-bottom: 30px;
+    }
 
-        .btn {
-            font-size: 16px;
-            padding: 10px 20px;
-            background-color: #007bff; /* Button color */
-            color: white;
-            border-radius: 4px;
-        }
+    table th {
+      background-color: #007bff;
+      color: white;
+    }
 
-        .btn:hover {
-            background-color: #0056b3; /* Button hover color */
-        }
+    .btn {
+      font-size: 14px;
+    }
 
-        .form-group input {
-            margin-bottom: 10px;
-        }
+    .form-control {
+      margin-bottom: 10px;
+    }
 
-        /* Media queries for responsive design */
-        @media (max-width: 768px) {
-            .card {
-                padding: 20px;
-            }
+    .footer {
+      text-align: center;
+      padding: 20px 0;
+    }
 
-            .table-responsive {
-                margin-top: 20px;
-            }
-        }
-    </style>
+    @media (max-width: 768px) {
+      .navbar-brand, .nav-link {
+        font-size: 14px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="#">NUPAC</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="home.html">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a id="logout-button" class="btn btn-danger">Logout</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Contact</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
 
-    <div class="container">
-        <h1 class="text-center">Upload Section</h1>
-    
-        <!-- Add Todo Section -->
-        <div class="card">
-            <div class="card-header">
-                <h2>Upload a Document</h2>
-            </div>
-            <div class="card-body">
-                <form id="todo-form">
-                    <div class="form-group">
-                        <input type="text" id="title" class="form-control" placeholder="Title" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" id="subject_name" class="form-control" placeholder="Subject Name" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" id="course_name" class="form-control" placeholder="Course Code" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" id="link" class="form-control" placeholder="Link" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-block">Upload</button>
-                </form>
-            </div>
-        </div>
-    
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="#">NUPAC</a>
+    <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-        <div class="card">
-            <div class="card-header">
-                <h2>Uploaded Documents</h2>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Subject Name</th>
-                                <th>Course Code</th>
-                                <th>Link</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="todo-list">
-                            <!-- Todo items will be added here dynamically -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+        <li class="nav-item"><a class="btn btn-danger ml-2" id="logout-btn">Logout</a></li>
+      </ul>
     </div>
+  </div>
+</nav>
 
-    <script>
-        const apiBaseUrl = 'https://nupac.koyeb.app/api/todos'; // Your deployed Flask API URL
+<!-- Main Container -->
+<div class="container">
+  <h1 class="text-center">Upload Section</h1>
 
-        // Check if the admin is logged in
-        if (sessionStorage.getItem('logged_in') !== 'true') {
-            window.location.href = 'admin_login.html'; // Redirect to login if not logged in
-        }
+  <!-- Upload Form -->
+  <div class="card">
+    <div class="card-header"><h2>Upload Document</h2></div>
+    <div class="card-body">
+      <form id="upload-form">
+        <input type="text" id="title" class="form-control" placeholder="Title" required />
+        <input type="text" id="subject_name" class="form-control" placeholder="Subject Name" required />
+        <input type="text" id="course_name" class="form-control" placeholder="Course Code" required />
+        <input type="text" id="link" class="form-control" placeholder="Link" required />
+        <button type="submit" class="btn btn-primary btn-block">Upload</button>
+      </form>
+    </div>
+  </div>
 
-        // Logout functionality
-        document.getElementById('logout-button').addEventListener('click', function() {
-            sessionStorage.removeItem('logged_in');
-            window.location.href = 'home.html'; // Redirect to login page on logout
+  <!-- Search -->
+  <input type="search" id="search" class="form-control mb-3" placeholder="Search documents...">
+
+  <!-- Document Table -->
+  <div class="card">
+    <div class="card-header"><h2>Uploaded Documents</h2></div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Subject</th>
+              <th>Course Code</th>
+              <th>Link</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="document-list"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <p>© 2025 NUPAC</p>
+  <p>
+    <a class="btn btn-success" href="https://whatsapp.com/channel/0029Vaq4PTdKLaHmfpuSU81P"><i class="fab fa-whatsapp"></i></a>
+    <a class="btn btn-danger" href="https://www.instagram.com/nup_affiliated_colleges?igsh=M2U5ZjR1anJxYWxq"><i class="fab fa-instagram"></i></a>
+    <a class="btn btn-primary" href="https://facebook.com/groups/945505587706960/"><i class="fab fa-facebook-f"></i></a>
+  </p>
+</div>
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  const apiBaseUrl = 'https://nupac.koyeb.app/api/todos';
+
+  // Redirect if not logged in
+  if (sessionStorage.getItem('logged_in') !== 'true') {
+    window.location.href = 'admin_login.html';
+  }
+
+  // Logout
+  document.getElementById('logout-btn').addEventListener('click', () => {
+    sessionStorage.removeItem('logged_in');
+    window.location.href = 'home.html';
+  });
+
+  // Load documents
+  window.onload = fetchDocuments;
+
+  // Fetch documents
+  function fetchDocuments() {
+    fetch(apiBaseUrl)
+      .then(res => res.json())
+      .then(data => {
+        const list = document.getElementById('document-list');
+        list.innerHTML = '';
+        data.todos.forEach(doc => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${doc.title}</td>
+            <td>${doc.subject_name}</td>
+            <td>${doc.course_name}</td>
+            <td><a href="${doc.link}" target="_blank">View</a></td>
+            <td>
+              <button class="btn btn-warning btn-sm" onclick="editDocument(${doc.id})">Edit</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteDocument(${doc.id})">Delete</button>
+            </td>
+          `;
+          list.appendChild(row);
         });
+      });
+  }
 
-        // Fetch all todos when the page loads
-        window.onload = function() {
-            fetchTodos();
-        }
+  // Upload document
+  document.getElementById('upload-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const data = {
+      title: document.getElementById('title').value,
+      subject_name: document.getElementById('subject_name').value,
+      course_name: document.getElementById('course_name').value,
+      link: document.getElementById('link').value
+    };
+    fetch(apiBaseUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(res => {
+      alert(res.message);
+      fetchDocuments();
+      this.reset();
+    });
+  });
 
-        // Function to fetch todos from the API
-        function fetchTodos() {
-            fetch(apiBaseUrl)
-                .then(response => response.json())
-                .then(data => {
-                    const todos = data.todos;
-                    const todoList = document.getElementById('todo-list');
-                    todoList.innerHTML = ''; // Clear the table first
-                    todos.forEach(todo => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td>${todo.title}</td>
-                            <td>${todo.subject_name}</td>
-                            <td>${todo.course_name}</td>
-                            <td><a href="${todo.link}" target="_blank">Link</a></td>
-                            <td>
-                                <button onclick="editTodo(${todo.id})" class="btn btn-warning btn-sm">Edit</button>
-                                <button onclick="deleteTodo(${todo.id})" class="btn btn-danger btn-sm">Delete</button>
-                            </td>
-                        `;
-                        todoList.appendChild(row);
-                    });
-                })
-                .catch(error => console.error('Error fetching todos:', error));
-        }
+  // Edit
+  function editDocument(id) {
+    const title = prompt("New title:");
+    const subject = prompt("New subject:");
+    const course = prompt("New course code:");
+    const link = prompt("New link:");
+    fetch(`${apiBaseUrl}/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, subject_name: subject, course_name: course, link })
+    })
+    .then(res => res.json())
+    .then(res => {
+      alert(res.message);
+      fetchDocuments();
+    });
+  }
 
-        // Function to add a new Document
-        document.getElementById('todo-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const title = document.getElementById('title').value;
-            const subjectName = document.getElementById('subject_name').value;
-            const courseName = document.getElementById('course_name').value;
-            const link = document.getElementById('link').value;
-
-            const newTodo = {
-                title: title,
-                subject_name: subjectName,
-                course_name: courseName,
-                link: link
-            };
-
-            fetch(apiBaseUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(newTodo)
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.message);
-                fetchTodos(); // Refresh the todo list
-                document.getElementById('todo-form').reset(); // Clear form fields
-            })
-            .catch(error => console.error('Error stroing document:', error));
+  // Delete
+  function deleteDocument(id) {
+    if (confirm("Delete this document?")) {
+      fetch(`${apiBaseUrl}/${id}`, { method: 'DELETE' })
+        .then(res => res.json())
+        .then(res => {
+          alert(res.message);
+          fetchDocuments();
         });
+    }
+  }
 
-        function deleteTodo(id) {
-            if (confirm('Are you sure you want to delete this document?')) {
-                fetch(`${apiBaseUrl}/${id}`, {
-                    method: 'DELETE'
-                })
-                .then(response => response.json())
-                .then(data => {
-                    alert(data.message);
-                    fetchTodos(); // Refresh the todo list
-                })
-                .catch(error => console.error('Error deleting document:', error));
-            }
-        }
+  // Live search
+  $('#search').on('keyup', function () {
+    const value = $(this).val().toLowerCase();
+    $('#document-list tr').filter(function () {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+    });
+  });
+</script>
 
-        // Function to edit a document
-        function editTodo(id) {
-            const newTitle = prompt("Enter new title:");
-            const newSubjectName = prompt("Enter new subject name:");
-            const newCourseName = prompt("Enter new course name:");
-            const newLink = prompt("Enter new link:");
-
-            const updatedTodo = {
-                title: newTitle,
-                subject_name: newSubjectName,
-                course_name: newCourseName,
-                link: newLink || ''
-            };
-
-            fetch(`${apiBaseUrl}/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(updatedTodo)
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.message);
-                fetchTodos(); // Refresh the todo list
-            })
-            .catch(error => console.error('Error updating document:', error));
-        }
-    </script>
-
-    <!-- Bootstrap JS & Popper.js -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
