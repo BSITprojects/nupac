@@ -72,10 +72,10 @@
         <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
         <li class="nav-item">
           <button class="btn btn-info ml-2" id="toggle-upload">
-            <i class="fas fa-upload"></i> Upload
+            <i class="fas fa-upload"></i> Toggle Upload
           </button>
         </li>
-        <li class="nav-item"><a class="btn btn-danger ml-2 fas fa-logout p-2" id="logout-btn">Logout</a></li>
+        <li class="nav-item"><a class="btn btn-danger ml-2" id="logout-btn">Logout</a></li>
       </ul>
     </div>
   </div>
@@ -95,11 +95,13 @@
       </form>
     </div>
   </div>
-
+</div>
   <!-- Search & Table Section -->
   <div id="search-and-table" style="margin-left: 20px; margin-right: 20px;">
+    <!-- Search -->
     <input type="text" id="search" class="form-control mb-3" placeholder="Search documents...">
 
+    <!-- Document Table -->
     <div class="card ml-auto">
       <div class="card-header"><h2>Uploaded Documents</h2></div>
       <div class="card-body">
@@ -124,7 +126,9 @@
       </div>
     </div>
   </div>
-</div>
+
+  <!-- Upload Form -->
+  
 
 <!-- Toast Notifications -->
 <div class="position-fixed bottom-0 right-0 p-3" style="z-index: 5; right: 0; bottom: 0;">
@@ -183,22 +187,20 @@
     window.location.href = 'admin_login.html';
   }
 
-  // Toggle upload form
-  $('#toggle-upload').on('click', () => {
-    $('#upload-section').slideToggle();
-  });
+    // Toggle upload form
+    $('#toggle-upload').on('click', () => {
+      $('#upload-section').slideToggle();
+    });
 
-  $('#logout-btn').on('click', () => {
+    $('#logout-btn').on('click', () => {
     sessionStorage.removeItem('logged_in');
     window.location.href = 'home.html';
   });
 
   $(document).ready(function () {
-    // Hide upload section on load
-    $('#upload-section').hide();
     fetchDocuments();
 
-    // Search functionality
+
     $('#search').on('keyup', function () {
       const keyword = $(this).val().toLowerCase();
       const filteredDocs = allDocs.filter(doc =>
@@ -211,7 +213,7 @@
       renderPagination(filteredDocs.length);
     });
 
-    // Upload form submission
+    // Upload form
     $('#upload-form').on('submit', function (e) {
       e.preventDefault();
       const newDoc = {
@@ -234,7 +236,6 @@
     });
   });
 
-  // Fetch documents
   function fetchDocuments() {
     fetch(apiBaseUrl)
       .then(res => res.json())
@@ -245,7 +246,6 @@
       });
   }
 
-  // Render table
   function renderTable(docs) {
     const list = $('#document-list');
     list.empty();
@@ -267,23 +267,52 @@
     });
   }
 
-  // Render pagination
   function renderPagination(totalItems) {
     const totalPages = Math.ceil(totalItems / itemsPerPage);
     const pagination = $('#pagination');
     pagination.empty();
 
-    for (let i = 1; i <= totalPages; i++) {
+    // Previous button (only show if not on first page)
+    if (currentPage > 1) {
       pagination.append(`
-        <li class="page-item ${i === currentPage ? 'active' : ''}">
-          <a class="page-link" href="#">${i}</a>
+        <li class="page-item">
+          <a class="page-link" href="#" aria-label="Previous">
+            <span aria-hidden="true">&laquo; Previous</span>
+          </a>
         </li>
       `);
     }
 
+    // Current page number
+    pagination.append(`
+      <li class="page-item active">
+        <a class="page-link" href="#">${currentPage}</a>
+      </li>
+    `);
+
+    // Next button (only show if not on last page)
+    if (currentPage < totalPages) {
+      pagination.append(`
+        <li class="page-item">
+          <a class="page-link" href="#" aria-label="Next">
+            <span aria-hidden="true">Next &raquo;</span>
+          </a>
+        </li>
+      `);
+    }
+
+    // Event handlers
     $('.page-link').on('click', function (e) {
       e.preventDefault();
-      currentPage = parseInt($(this).text());
+      const isPrevious = $(this).attr('aria-label') === 'Previous';
+      const isNext = $(this).attr('aria-label') === 'Next';
+      
+      if (isPrevious) {
+        currentPage = Math.max(1, currentPage - 1);
+      } else if (isNext) {
+        currentPage = Math.min(totalPages, currentPage + 1);
+      }
+
       const keyword = $('#search').val().toLowerCase();
       const filtered = keyword
         ? allDocs.filter(doc =>
@@ -297,25 +326,76 @@
     });
   }
 
-  // Edit document (placeholder)
   function editDocument(id) {
-    alert(`Edit document with ID: ${id}`);
-    // Implement your edit functionality here
+    const doc = allDocs.find(d => d.id === id);
+    if (!doc) return;
+
+    const title = prompt("New title:", doc.title || "");
+    const subject = prompt("New subject:", doc.subject_name || "");
+    const course = prompt("New course code:", doc.course_name || ""); 
+    const link = prompt("New link:", doc.link || ""); 
+    
+    if (title !== null && subject !== null && course !== null && link !== null) {
+      fetch(`${apiBaseUrl}/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          title, 
+          subject_name: subject, 
+          course_name: course, 
+          link 
+        })
+      })
+      .then(res => res.json())
+      .then(res => {
+        showToast('Success', res.message || 'Document updated successfully');
+        fetchDocuments();
+      })
+      .catch(error => {
+        showToast('Error', error.message || 'Failed to update document', true);
+        console.error('Update error:', error);
+      });
+    }
   }
 
-  // Delete document
-  function deleteDocument(id) {
-    $('#confirmModal').modal('show');
-    $('#confirmDelete').on('click', function () {
-      fetch(`${apiBaseUrl}/${id}`, { method: 'DELETE' })
-        .then(res => res.json())
-        .then(() => {
-          $('#confirmModal').modal('hide');
-          fetchDocuments();
-        });
-    });
+function showToast(title, message, isError = false) {
+  $('#toast-title').text(title);
+  $('#toast-message').text(message);
+  $('#liveToast').removeClass('bg-danger');
+  if (isError) {
+    $('#liveToast').addClass('bg-danger text-white');
   }
-</script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+  $('.toast').toast('show');
+}
+
+function deleteDocument(id) {
+  $('#confirmModal').modal('show');
+  $('#confirmDelete').off('click').on('click', function() {
+    $('#confirmModal').modal('hide');
+    const deleteBtn = $(`button[onclick="deleteDocument(${id})"]`);
+    deleteBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Deleting...');
+    
+    fetch(`${apiBaseUrl}/${id}`, { 
+      method: 'DELETE' 
+    })
+    .then(res => {
+      if (!res.ok) throw new Error('Network response was not ok');
+      return res.json();
+    })
+    .then(res => {
+      showToast('Success', res.message || 'Document deleted successfully');
+      fetchDocuments();
+    })
+    .catch(error => {
+      showToast('Error', error.message || 'Failed to delete document', true);
+      console.error('Delete error:', error);
+    })
+    .finally(() => {
+      deleteBtn.prop('disabled', false).text('Delete');
+    });
+  });
+}
+     </script>
+
 </body>
-</html>
+ </html> 
