@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>NUPAC Admin Panel</title>
 
-  <!-- Bootstrap & Icons -->
+  <!-- Bootstrap & FontAwesome -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
 
@@ -51,10 +51,8 @@
       padding: 20px 0;
     }
 
-    @media (max-width: 768px) {
-      .navbar-brand, .nav-link {
-        font-size: 14px;
-      }
+    .pagination {
+      justify-content: center;
     }
   </style>
 </head>
@@ -67,13 +65,17 @@
     <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
-
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
         <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
-        <li class="nav-item"><a class="btn btn-danger ml-2" id="logout-btn">Logout</a></li>
+        <li class="nav-item">
+          <button class="btn btn-info ml-2" id="toggle-upload">
+            <i class="fas fa-upload"></i> Upload
+          </button>
+        </li>
+        <li class="nav-item"><a class="btn btn-danger ml-2 fas fa-logout p-2" id="logout-btn">Logout</a></li>
       </ul>
     </div>
   </div>
@@ -81,10 +83,7 @@
 
 <!-- Main Container -->
 <div class="container">
-  <h1 class="text-center">Upload Section</h1>
-
-  <!-- Upload Form -->
-  <div class="card">
+  <div class="card" id="upload-section">
     <div class="card-header"><h2>Upload Document</h2></div>
     <div class="card-body">
       <form id="upload-form">
@@ -96,34 +95,77 @@
       </form>
     </div>
   </div>
+</div>
+  <!-- Search & Table Section -->
+  <div id="search-and-table" style="margin-left: 20px; margin-right: 20px;">
+    <!-- Search -->
+    <input type="text" id="search" class="form-control mb-3" placeholder="Search documents...">
 
-  <!-- Search -->
-  <input type="search" id="search" class="form-control mb-3" placeholder="Search documents...">
+    <!-- Document Table -->
+    <div class="card ml-auto">
+      <div class="card-header"><h2>Uploaded Documents</h2></div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Subject</th>
+                <th>Course Code</th>
+                <th>Link</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="document-list"></tbody>
+          </table>
+          <!-- Pagination -->
+          <nav>
+            <ul class="pagination" id="pagination"></ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <!-- Document Table -->
-  <div class="card">
-    <div class="card-header"><h2>Uploaded Documents</h2></div>
-    <div class="card-body">
-      <div class="table-responsive">
-        <table class="table table-bordered table-striped">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Subject</th>
-              <th>Course Code</th>
-              <th>Link</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="document-list"></tbody>
-        </table>
+  <!-- Upload Form -->
+  
+
+<!-- Toast Notifications -->
+<div class="position-fixed bottom-0 right-0 p-3" style="z-index: 5; right: 0; bottom: 0;">
+  <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <strong class="mr-auto" id="toast-title">Notification</strong>
+      <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="toast-body" id="toast-message"></div>
+  </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirm Deletion</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete this document?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
       </div>
     </div>
   </div>
 </div>
 
 <!-- Footer -->
-<div class="footer">
+<div class="footer fixed-bottom -0 w-100">
   <p>© 2025 NUPAC</p>
   <p>
     <a class="btn btn-success" href="https://whatsapp.com/channel/0029Vaq4PTdKLaHmfpuSU81P"><i class="fab fa-whatsapp"></i></a>
@@ -136,105 +178,193 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
   const apiBaseUrl = 'https://nupac.koyeb.app/api/todos';
+  const itemsPerPage = 5;
+  let allDocs = [];
+  let currentPage = 1;
 
   // Redirect if not logged in
   if (sessionStorage.getItem('logged_in') !== 'true') {
     window.location.href = 'admin_login.html';
   }
 
-  // Logout
-  document.getElementById('logout-btn').addEventListener('click', () => {
+    // Toggle upload form
+    $('#toggle-upload').on('click', () => {
+      $('#upload-section').slideToggle();
+    });
+
+    $('#logout-btn').on('click', () => {
     sessionStorage.removeItem('logged_in');
     window.location.href = 'home.html';
   });
 
-  // Load documents
-  window.onload = fetchDocuments;
+  $(document).ready(function () {
+    // Hide upload section on load
+    $('#upload-section').hide();
+    fetchDocuments();
 
-  // Fetch documents
+
+    $('#search').on('keyup', function () {
+      const keyword = $(this).val().toLowerCase();
+      const filteredDocs = allDocs.filter(doc =>
+        Object.values(doc).some(value =>
+          String(value).toLowerCase().includes(keyword)
+        )
+      );
+      currentPage = 1;
+      renderTable(filteredDocs);
+      renderPagination(filteredDocs.length);
+    });
+
+    // Upload form
+    $('#upload-form').on('submit', function (e) {
+      e.preventDefault();
+      const newDoc = {
+        title: $('#title').val(),
+        subject_name: $('#subject_name').val(),
+        course_name: $('#course_name').val(),
+        link: $('#link').val()
+      };
+      fetch(apiBaseUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newDoc)
+      })
+      .then(res => res.json())
+      .then(data => {
+        alert(data.message);
+        fetchDocuments();
+        this.reset();
+      });
+    });
+  });
+
   function fetchDocuments() {
     fetch(apiBaseUrl)
       .then(res => res.json())
       .then(data => {
-        const list = document.getElementById('document-list');
-        list.innerHTML = '';
-        data.todos.forEach(doc => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${doc.title}</td>
-            <td>${doc.subject_name}</td>
-            <td>${doc.course_name}</td>
-            <td><a href="${doc.link}" target="_blank">View</a></td>
-            <td>
-              <button class="btn btn-warning btn-sm" onclick="editDocument(${doc.id})">Edit</button>
-              <button class="btn btn-danger btn-sm" onclick="deleteDocument(${doc.id})">Delete</button>
-            </td>
-          `;
-          list.appendChild(row);
-        });
+        allDocs = data.todos;
+        renderTable(allDocs);
+        renderPagination(allDocs.length);
       });
   }
 
-  // Upload document
-  document.getElementById('upload-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const data = {
-      title: document.getElementById('title').value,
-      subject_name: document.getElementById('subject_name').value,
-      course_name: document.getElementById('course_name').value,
-      link: document.getElementById('link').value
-    };
-    fetch(apiBaseUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    })
-    .then(res => res.json())
-    .then(res => {
-      alert(res.message);
-      fetchDocuments();
-      this.reset();
+  function renderTable(docs) {
+    const list = $('#document-list');
+    list.empty();
+    const start = (currentPage - 1) * itemsPerPage;
+    const paginatedDocs = docs.slice(start, start + itemsPerPage);
+    paginatedDocs.forEach(doc => {
+      list.append(`
+        <tr>
+          <td>${doc.title}</td>
+          <td>${doc.subject_name}</td>
+          <td>${doc.course_name}</td>
+          <td><a href="${doc.link}" target="_blank">View</a></td>
+          <td>
+            <button class="btn btn-warning btn-sm" onclick="editDocument(${doc.id})">Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteDocument(${doc.id})">Delete</button>
+          </td>
+        </tr>
+      `);
     });
-  });
+  }
 
-  // Edit
+  function renderPagination(totalItems) {
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    const pagination = $('#pagination');
+    pagination.empty();
+
+    for (let i = 1; i <= totalPages; i++) {
+      pagination.append(`
+        <li class="page-item ${i === currentPage ? 'active' : ''}">
+          <a class="page-link" href="#">${i}</a>
+        </li>
+      `);
+    }
+
+    $('.page-link').on('click', function (e) {
+      e.preventDefault();
+      currentPage = parseInt($(this).text());
+      const keyword = $('#search').val().toLowerCase();
+      const filtered = keyword
+        ? allDocs.filter(doc =>
+            Object.values(doc).some(val =>
+              String(val).toLowerCase().includes(keyword)
+            )
+          )
+        : allDocs;
+      renderTable(filtered);
+      renderPagination(filtered.length);
+    });
+  }
+
   function editDocument(id) {
     const title = prompt("New title:");
     const subject = prompt("New subject:");
-    const course = prompt("New course code:");
-    const link = prompt("New link:");
-    fetch(`${apiBaseUrl}/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title, subject_name: subject, course_name: course, link })
-    })
-    .then(res => res.json())
-    .then(res => {
-      alert(res.message);
-      fetchDocuments();
-    });
-  }
-
-  // Delete
-  function deleteDocument(id) {
-    if (confirm("Delete this document?")) {
-      fetch(`${apiBaseUrl}/${id}`, { method: 'DELETE' })
-        .then(res => res.json())
-        .then(res => {
-          alert(res.message);
-          fetchDocuments();
-        });
+    const course = prompt("New course code:"); 
+    const link = prompt("New link:"); 
+    
+    if (title && subject && course && link) {
+      fetch(`${apiBaseUrl}/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          title, 
+          subject_name: subject, 
+          course_name: course, 
+          link 
+        })
+      })
+      .then(res => res.json())
+      .then(res => {
+        showToast('Success', res.message || 'Document updated successfully');
+        fetchDocuments();
+      })
+      .catch(error => {
+        showToast('Error', error.message || 'Failed to update document', true);
+        console.error('Update error:', error);
+      });
     }
   }
 
-  // Live search
-  $('#search').on('keyup', function () {
-    const value = $(this).val().toLowerCase();
-    $('#document-list tr').filter(function () {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+function showToast(title, message, isError = false) {
+  $('#toast-title').text(title);
+  $('#toast-message').text(message);
+  $('#liveToast').removeClass('bg-danger');
+  if (isError) {
+    $('#liveToast').addClass('bg-danger text-white');
+  }
+  $('.toast').toast('show');
+}
+
+function deleteDocument(id) {
+  $('#confirmModal').modal('show');
+  $('#confirmDelete').off('click').on('click', function() {
+    $('#confirmModal').modal('hide');
+    const deleteBtn = $(`button[onclick="deleteDocument(${id})"]`);
+    deleteBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Deleting...');
+    
+    fetch(`${apiBaseUrl}/${id}`, { 
+      method: 'DELETE' 
+    })
+    .then(res => {
+      if (!res.ok) throw new Error('Network response was not ok');
+      return res.json();
+    })
+    .then(res => {
+      showToast('Success', res.message || 'Document deleted successfully');
+      fetchDocuments();
+    })
+    .catch(error => {
+      showToast('Error', error.message || 'Failed to delete document', true);
+      console.error('Delete error:', error);
+    })
+    .finally(() => {
+      deleteBtn.prop('disabled', false).text('Delete');
     });
   });
-</script>
+}
+     </script>
 
 </body>
-</html>
+ </html> 
