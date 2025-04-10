@@ -165,7 +165,7 @@
 </div>
 
 <!-- Footer -->
-<div class="footer fixed-bottom -0 w-100">
+<div class="footer fixed-bottom -0  mt-4">
   <p>© 2025 NUPAC</p>
   <p>
     <a class="btn btn-success" href="https://whatsapp.com/channel/0029Vaq4PTdKLaHmfpuSU81P"><i class="fab fa-whatsapp"></i></a>
@@ -183,15 +183,17 @@
   let currentPage = 1;
 
   // Redirect if not logged in
-  if (sessionStorage.getItem('logged_in') !== 'true') {
-    window.location.href = 'admin_login.html';
-  }
+  // if (sessionStorage.getItem('logged_in') !== 'true') {
+  //   window.location.href = 'admin_login.html';
+  // }
 
+  $(document).ready(function () {
+    $('#upload-section').hide();
     // Toggle upload form
     $('#toggle-upload').on('click', () => {
       $('#upload-section').slideToggle();
     });
-
+  });
     $('#logout-btn').on('click', () => {
     sessionStorage.removeItem('logged_in');
     window.location.href = 'home.html';
@@ -212,7 +214,7 @@
       renderTable(filteredDocs);
       renderPagination(filteredDocs.length);
     });
-
+    
     // Upload form
     $('#upload-form').on('submit', function (e) {
       e.preventDefault();
