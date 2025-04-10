@@ -70,11 +70,7 @@
         <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
         <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
-        <li class="nav-item">
-          <button class="btn btn-info ml-2" id="toggle-upload">
-            <i class="fas fa-upload"></i> Upload
-          </button>
-        </li>
+        <li class="nav-item"><button class="btn btn-info ml-2" id="toggle-upload"><i class="fas fa-upload"></i> Upload</button></li>
         <li class="nav-item"><a class="btn btn-danger ml-2 fas fa-logout p-2" id="logout-btn">Logout</a></li>
       </ul>
     </div>
@@ -96,39 +92,37 @@
     </div>
   </div>
 </div>
-  <!-- Search & Table Section -->
-  <div id="search-and-table" style="margin-left: 20px; margin-right: 20px;">
-    <!-- Search -->
-    <input type="text" id="search" class="form-control mb-3" placeholder="Search documents...">
 
-    <!-- Document Table -->
-    <div class="card ml-auto">
-      <div class="card-header"><h2>Uploaded Documents</h2></div>
-      <div class="card-body">
-        <div class="table-responsive">
-          <table class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Subject</th>
-                <th>Course Code</th>
-                <th>Link</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="document-list"></tbody>
-          </table>
-          <!-- Pagination -->
-          <nav>
-            <ul class="pagination" id="pagination"></ul>
-          </nav>
-        </div>
+<!-- Search & Table Section -->
+<div id="search-and-table" style="margin-left: 20px; margin-right: 20px;">
+  <!-- Search -->
+  <input type="text" id="search" class="form-control mb-3" placeholder="Search documents...">
+
+  <!-- Document Table -->
+  <div class="card ml-auto">
+    <div class="card-header"><h2>Uploaded Documents</h2></div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Subject</th>
+              <th>Course Code</th>
+              <th>Link</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="document-list"></tbody>
+        </table>
+        <!-- Pagination -->
+        <nav>
+          <ul class="pagination" id="pagination"></ul>
+        </nav>
       </div>
     </div>
   </div>
-
-  <!-- Upload Form -->
-  
+</div>
 
 <!-- Toast Notifications -->
 <div class="position-fixed bottom-0 right-0 p-3" style="z-index: 5; right: 0; bottom: 0;">
@@ -165,7 +159,7 @@
 </div>
 
 <!-- Footer -->
-<div class="footer fixed-bottom -0 w-100">
+<div class="footer fixed-bottom w-100">
   <p>© 2025 NUPAC</p>
   <p>
     <a class="btn btn-success" href="https://whatsapp.com/channel/0029Vaq4PTdKLaHmfpuSU81P"><i class="fab fa-whatsapp"></i></a>
@@ -187,12 +181,12 @@
     window.location.href = 'admin_login.html';
   }
 
-    // Toggle upload form
-    $('#toggle-upload').on('click', () => {
-      $('#upload-section').slideToggle();
-    });
+  // Toggle upload form
+  $('#toggle-upload').on('click', () => {
+    $('#upload-section').slideToggle();
+  });
 
-    $('#logout-btn').on('click', () => {
+  $('#logout-btn').on('click', () => {
     sessionStorage.removeItem('logged_in');
     window.location.href = 'home.html';
   });
@@ -201,7 +195,6 @@
     // Hide upload section on load
     $('#upload-section').hide();
     fetchDocuments();
-
 
     $('#search').on('keyup', function () {
       const keyword = $(this).val().toLowerCase();
@@ -274,34 +267,62 @@
     const pagination = $('#pagination');
     pagination.empty();
 
-    for (let i = 1; i <= totalPages; i++) {
+    let startPage = currentPage - 1;
+    let endPage = currentPage + 1;
+
+    // Ensure the page numbers are within bounds
+    if (startPage < 1) {
+      startPage = 1;
+      endPage = 3;
+    } 
+    if (endPage > totalPages) {
+      endPage = totalPages;
+      startPage = totalPages - 2;
+    }
+
+    // "Previous" button
+    pagination.append(`
+      <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+        <a class="page-link" href="#" onclick="changePage(${currentPage - 1})">Previous</a>
+      </li>
+    `);
+
+    // Page numbers
+    for (let i = startPage; i <= endPage; i++) {
       pagination.append(`
         <li class="page-item ${i === currentPage ? 'active' : ''}">
-          <a class="page-link" href="#">${i}</a>
+          <a class="page-link" href="#" onclick="changePage(${i})">${i}</a>
         </li>
       `);
     }
 
-    $('.page-link').on('click', function (e) {
-      e.preventDefault();
-      currentPage = parseInt($(this).text());
-      const keyword = $('#search').val().toLowerCase();
-      const filtered = keyword
-        ? allDocs.filter(doc =>
-            Object.values(doc).some(val =>
-              String(val).toLowerCase().includes(keyword)
-            )
+    // "Next" button
+    pagination.append(`
+      <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+        <a class="page-link" href="#" onclick="changePage(${currentPage + 1})">Next</a>
+      </li>
+    `);
+  }
+
+  function changePage(pageNumber) {
+    if (pageNumber < 1 || pageNumber > Math.ceil(allDocs.length / itemsPerPage)) return;
+    currentPage = pageNumber;
+    const keyword = $('#search').val().toLowerCase();
+    const filtered = keyword
+      ? allDocs.filter(doc =>
+          Object.values(doc).some(val =>
+            String(val).toLowerCase().includes(keyword)
           )
-        : allDocs;
-      renderTable(filtered);
-      renderPagination(filtered.length);
-    });
+        )
+      : allDocs;
+    renderTable(filtered);
+    renderPagination(filtered.length);
   }
 
   function editDocument(id) {
     const title = prompt("New title:");
     const subject = prompt("New subject:");
-    const course = prompt("New course code:"); 
+    const course = prompt("New course code:");
     const link = prompt("New link:"); 
     
     if (title && subject && course && link) {
@@ -327,44 +348,44 @@
     }
   }
 
-function showToast(title, message, isError = false) {
-  $('#toast-title').text(title);
-  $('#toast-message').text(message);
-  $('#liveToast').removeClass('bg-danger');
-  if (isError) {
-    $('#liveToast').addClass('bg-danger text-white');
+  function showToast(title, message, isError = false) {
+    $('#toast-title').text(title);
+    $('#toast-message').text(message);
+    $('#liveToast').removeClass('bg-danger');
+    if (isError) {
+      $('#liveToast').addClass('bg-danger text-white');
+    }
+    $('.toast').toast('show');
   }
-  $('.toast').toast('show');
-}
 
-function deleteDocument(id) {
-  $('#confirmModal').modal('show');
-  $('#confirmDelete').off('click').on('click', function() {
-    $('#confirmModal').modal('hide');
-    const deleteBtn = $(`button[onclick="deleteDocument(${id})"]`);
-    deleteBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Deleting...');
-    
-    fetch(`${apiBaseUrl}/${id}`, { 
-      method: 'DELETE' 
-    })
-    .then(res => {
-      if (!res.ok) throw new Error('Network response was not ok');
-      return res.json();
-    })
-    .then(res => {
-      showToast('Success', res.message || 'Document deleted successfully');
-      fetchDocuments();
-    })
-    .catch(error => {
-      showToast('Error', error.message || 'Failed to delete document', true);
-      console.error('Delete error:', error);
-    })
-    .finally(() => {
-      deleteBtn.prop('disabled', false).text('Delete');
+  function deleteDocument(id) {
+    $('#confirmModal').modal('show');
+    $('#confirmDelete').off('click').on('click', function() {
+      $('#confirmModal').modal('hide');
+      const deleteBtn = $(`button[onclick="deleteDocument(${id})"]`);
+      deleteBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Deleting...');
+      
+      fetch(`${apiBaseUrl}/${id}`, { 
+        method: 'DELETE' 
+      })
+      .then(res => {
+        if (!res.ok) throw new Error('Network response was not ok');
+        return res.json();
+      })
+      .then(res => {
+        showToast('Success', res.message || 'Document deleted successfully');
+        fetchDocuments();
+      })
+      .catch(error => {
+        showToast('Error', error.message || 'Failed to delete document', true);
+        console.error('Delete error:', error);
+      })
+      .finally(() => {
+        deleteBtn.prop('disabled', false).text('Delete');
+      });
     });
-  });
-}
-     </script>
+  }
+</script>
 
 </body>
- </html> 
+</html>
