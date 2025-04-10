@@ -95,34 +95,32 @@
       </form>
     </div>
   </div>
-</div>
 
-<!-- Search & Table Section -->
-<div id="search-and-table" style="margin-left: 20px; margin-right: 20px;">
-  <!-- Search -->
-  <input type="text" id="search" class="form-control mb-3" placeholder="Search documents...">
+  <!-- Search & Table Section -->
+  <div id="search-and-table" style="margin-left: 20px; margin-right: 20px;">
+    <input type="text" id="search" class="form-control mb-3" placeholder="Search documents...">
 
-  <!-- Document Table -->
-  <div class="card ml-auto">
-    <div class="card-header"><h2>Uploaded Documents</h2></div>
-    <div class="card-body">
-      <div class="table-responsive">
-        <table class="table table-bordered table-striped">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Subject</th>
-              <th>Course Code</th>
-              <th>Link</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="document-list"></tbody>
-        </table>
-        <!-- Pagination -->
-        <nav>
-          <ul class="pagination" id="pagination"></ul>
-        </nav>
+    <div class="card ml-auto">
+      <div class="card-header"><h2>Uploaded Documents</h2></div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Subject</th>
+                <th>Course Code</th>
+                <th>Link</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="document-list"></tbody>
+          </table>
+          <!-- Pagination -->
+          <nav>
+            <ul class="pagination" id="pagination"></ul>
+          </nav>
+        </div>
       </div>
     </div>
   </div>
@@ -168,7 +166,7 @@
   <p>
     <a class="btn btn-success" href="https://whatsapp.com/channel/0029Vaq4PTdKLaHmfpuSU81P"><i class="fab fa-whatsapp"></i></a>
     <a class="btn btn-danger" href="https://www.instagram.com/nup_affiliated_colleges?igsh=M2U5ZjR1anJxYWxq"><i class="fab fa-instagram"></i></a>
-    <a class="btn btn-primary" href="https://www.facebook.com/NUPAC"><i class="fab fa-facebook"></i></a>
+    <a class="btn btn-primary" href="https://facebook.com/groups/945505587706960/"><i class="fab fa-facebook-f"></i></a>
   </p>
 </div>
 
@@ -185,20 +183,22 @@
     window.location.href = 'admin_login.html';
   }
 
+  // Toggle upload form
+  $('#toggle-upload').on('click', () => {
+    $('#upload-section').slideToggle();
+  });
+
+  $('#logout-btn').on('click', () => {
+    sessionStorage.removeItem('logged_in');
+    window.location.href = 'home.html';
+  });
+
   $(document).ready(function () {
     // Hide upload section on load
     $('#upload-section').hide();
     fetchDocuments();
 
-    $('#toggle-upload').on('click', () => {
-      $('#upload-section').slideToggle();
-    });
-
-    $('#logout-btn').on('click', () => {
-      sessionStorage.removeItem('logged_in');
-      window.location.href = 'home.html';
-    });
-
+    // Search functionality
     $('#search').on('keyup', function () {
       const keyword = $(this).val().toLowerCase();
       const filteredDocs = allDocs.filter(doc =>
@@ -211,7 +211,7 @@
       renderPagination(filteredDocs.length);
     });
 
-    // Upload form
+    // Upload form submission
     $('#upload-form').on('submit', function (e) {
       e.preventDefault();
       const newDoc = {
@@ -234,95 +234,88 @@
     });
   });
 
+  // Fetch documents
   function fetchDocuments() {
     fetch(apiBaseUrl)
       .then(res => res.json())
       .then(data => {
-        allDocs = data.todos || [];  // Ensure this is an array
+        allDocs = data.todos;
         renderTable(allDocs);
         renderPagination(allDocs.length);
-      })
-      .catch(error => {
-        console.error('Error fetching documents:', error);
-        showToast('Error', 'Failed to fetch documents');
       });
   }
 
+  // Render table
   function renderTable(docs) {
     const list = $('#document-list');
     list.empty();
     const start = (currentPage - 1) * itemsPerPage;
     const paginatedDocs = docs.slice(start, start + itemsPerPage);
-    if (paginatedDocs.length === 0) {
-      list.append('<tr><td colspan="5" class="text-center">No documents found</td></tr>');
-    } else {
-      paginatedDocs.forEach(doc => {
-        list.append(`
-          <tr>
-            <td>${doc.title}</td>
-            <td>${doc.subject_name}</td>
-            <td>${doc.course_name}</td>
-            <td><a href="${doc.link}" target="_blank">View</a></td>
-            <td>
-              <button class="btn btn-warning btn-sm" onclick="editDocument(${doc.id})">Edit</button>
-              <button class="btn btn-danger btn-sm" onclick="deleteDocument(${doc.id})">Delete</button>
-            </td>
-          </tr>
-        `);
-      });
-    }
-  }
-
-  function renderPagination(totalDocs) {
-    const pagination = $('#pagination');
-    pagination.empty();
-    const totalPages = Math.ceil(totalDocs / itemsPerPage);
-    for (let i = 1; i <= totalPages; i++) {
-      const pageItem = $(`<li class="page-item ${i === currentPage ? 'active' : ''}">
-        <a class="page-link" href="#">${i}</a>
-      </li>`);
-      pageItem.on('click', function () {
-        currentPage = i;
-        renderTable(allDocs);
-      });
-      pagination.append(pageItem);
-    }
-  }
-
-  function deleteDocument(docId) {
-    $('#confirmModal').modal('show');
-    $('#confirmDelete').on('click', function () {
-      fetch(`${apiBaseUrl}/${docId}`, {
-        method: 'DELETE',
-      })
-      .then(res => res.json())
-      .then(data => {
-        $('#confirmModal').modal('hide');
-        showToast('Success', data.message);
-        fetchDocuments();
-      })
-      .catch(err => {
-        $('#confirmModal').modal('hide');
-        showToast('Error', 'Failed to delete the document');
-      });
+    paginatedDocs.forEach(doc => {
+      list.append(`
+        <tr>
+          <td>${doc.title}</td>
+          <td>${doc.subject_name}</td>
+          <td>${doc.course_name}</td>
+          <td><a href="${doc.link}" target="_blank">View</a></td>
+          <td>
+            <button class="btn btn-warning btn-sm" onclick="editDocument(${doc.id})">Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteDocument(${doc.id})">Delete</button>
+          </td>
+        </tr>
+      `);
     });
   }
 
-  function editDocument(docId) {
-    // Implement edit functionality (e.g., pre-fill form)
-    alert(`Edit document ${docId}`);
+  // Render pagination
+  function renderPagination(totalItems) {
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    const pagination = $('#pagination');
+    pagination.empty();
+
+    for (let i = 1; i <= totalPages; i++) {
+      pagination.append(`
+        <li class="page-item ${i === currentPage ? 'active' : ''}">
+          <a class="page-link" href="#">${i}</a>
+        </li>
+      `);
+    }
+
+    $('.page-link').on('click', function (e) {
+      e.preventDefault();
+      currentPage = parseInt($(this).text());
+      const keyword = $('#search').val().toLowerCase();
+      const filtered = keyword
+        ? allDocs.filter(doc =>
+            Object.values(doc).some(val =>
+              String(val).toLowerCase().includes(keyword)
+            )
+          )
+        : allDocs;
+      renderTable(filtered);
+      renderPagination(filtered.length);
+    });
   }
 
-  function showToast(title, message) {
-    $('#toast-title').text(title);
-    $('#toast-message').text(message);
-    $('#liveToast').toast('show');
+  // Edit document (placeholder)
+  function editDocument(id) {
+    alert(`Edit document with ID: ${id}`);
+    // Implement your edit functionality here
+  }
+
+  // Delete document
+  function deleteDocument(id) {
+    $('#confirmModal').modal('show');
+    $('#confirmDelete').on('click', function () {
+      fetch(`${apiBaseUrl}/${id}`, { method: 'DELETE' })
+        .then(res => res.json())
+        .then(() => {
+          $('#confirmModal').modal('hide');
+          fetchDocuments();
+        });
+    });
   }
 </script>
-
-<!-- Bootstrap JS & Popper.js -->
-<script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
