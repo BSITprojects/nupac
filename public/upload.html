@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -71,7 +70,6 @@
             text-decoration: underline; /* Optional: Underline on hover */
         }
 
-
         @media (max-width: 768px) {
             .card {
                 padding: 20px;
@@ -104,22 +102,24 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">Contact</a>
                 </li>
-            </ul><div class="form-group">
-    <input type="text" style="margin:0px 0px 0px 0px;" id="search" class="form-control" placeholder="Search documents...">
-</div>
+            </ul>
+            <div class="form-group">
+                <input type="text" style="margin:0px 0px 0px 0px;" id="search" class="form-control" placeholder="Search documents...">
+            </div>
         </div>
     </div>
 </nav>
+
 <div class="container">
     <h1 class="text-center">Upload Section</h1>
 
-    <!-- Add Todo Section -->
+    <!-- Add File Section -->
     <div class="card">
         <div class="card-header">
             <h2>Upload a Document</h2>
         </div>
         <div class="card-body">
-            <form id="todo-form">
+            <form id="file-form">
                 <div class="form-group">
                     <input type="text" id="title" class="form-control" placeholder="Title" required>
                 </div>
@@ -137,7 +137,7 @@
         </div>
     </div>
 
-    <!-- Upload -->
+    <!-- Uploaded Files -->
     <div class="card">
         <div class="card-header">
             <h2>Uploaded Documents</h2>
@@ -153,77 +153,62 @@
                             <th>Link</th>
                         </tr>
                     </thead>
-                    <tbody id="todo-list">
-                        <!-- Todo items will be dynamically added here -->
+                    <tbody id="file-list">
+                        <!-- File items will be dynamically added here -->
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 </div>
+
 <div class="footer" style="text-align: center;">
     <p>Copyright © 2025 NUPAC</p>
     <p>Follow us on:
        <!-- Social Media Links -->
-       <a data-mdb-ripple-init class="btn btn-primary" style="background-color: #25d366;" href="https://whatsapp.com/channel/0029Vaq4PTdKLaHmfpuSU81P" role="button">
+       <a class="btn btn-primary" style="background-color: #25d366;" href="https://whatsapp.com/channel/0029Vaq4PTdKLaHmfpuSU81P" role="button">
         <i class="fab fa-whatsapp"></i></a>
-        <a data-mdb-ripple-init class="btn btn-primary" style="background-color: #ac2bac;" href="https://www.instagram.com/nup_affiliated_colleges?igsh=M2U5ZjR1anJxYWxq" role="button">
+        <a class="btn btn-primary" style="background-color: #ac2bac;" href="https://www.instagram.com/nup_affiliated_colleges?igsh=M2U5ZjR1anJxYWxq" role="button">
         <i class="fab fa-instagram"></i></a>
-        <a data-mdb-ripple-init class="btn btn-primary" style="background-color: #3b5998;" href="https://facebook.com/groups/945505587706960/" role="button">
+        <a class="btn btn-primary" style="background-color: #3b5998;" href="https://facebook.com/groups/945505587706960/" role="button">
         <i class="fab fa-facebook-f"></i></a>
     </p>
 </div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $("#search").on("keyup", function () {
-            var value = $(this).val().toLowerCase();
-            $("#todo-list tr").filter(function () {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-            });
-        });
-    });
-</script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<!-- Bootstrap JS and dependencies -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.0/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     const apiBaseUrl = 'https://nupac-ashen.vercel.app/api/files';
 
-    // Fetch all links when the page loads
+    // Fetch all files when the page loads
     window.onload = function() {
-        fetchTodos();
+        fetchFiles();
     }
 
-    // Function to fetch todos from the API
-    function fetchTodos() {
+    // Function to fetch files from the API
+    function fetchFiles() {
         fetch(apiBaseUrl)
             .then(response => response.json())
             .then(data => {
-                const todos = data.todos;
-                const todoList = document.getElementById('todo-list');
-                todoList.innerHTML = ''; // Clear the table first
-                todos.forEach(todo => {
+                const files = data.files;
+                const fileList = document.getElementById('file-list');
+                fileList.innerHTML = ''; // Clear the table first
+                files.forEach(file => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td>${todo.title}</td>
-                        <td>${todo.subject_name}</td>
-                        <td>${todo.course_name}</td>
-                        <td><a href="${todo.link}" target="_blank" class="btn btn-link">View Link</a></td>
+                        <td>${file.title}</td>
+                        <td>${file.subject_name}</td>
+                        <td>${file.course_name}</td>
+                        <td><a href="${file.link}" target="_blank" class="btn btn-link">View Link</a></td>
                     `;
-                    todoList.appendChild(row);
+                    fileList.appendChild(row);
                 });
             })
-            .catch(error => console.error('Error fetching todos:', error));
+            .catch(error => console.error('Error fetching files:', error));
     }
 
-    // Function to add a new todo
-    document.getElementById('todo-form').addEventListener('submit', function(event) {
+    // Handle form submission to upload a file
+    document.getElementById('file-form').addEventListener('submit', function(event) {
         event.preventDefault();
 
         const title = document.getElementById('title').value;
@@ -231,27 +216,28 @@
         const courseName = document.getElementById('course_name').value;
         const link = document.getElementById('link').value;
 
-        const newTodo = {
+        const newFile = {
             title: title,
             subject_name: subjectName,
             course_name: courseName,
             link: link
         };
 
+        // Send data to the backend
         fetch(apiBaseUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(newTodo)
+            body: JSON.stringify(newFile)
         })
         .then(response => response.json())
         .then(data => {
             alert(data.message);
-            fetchTodos(); // Refresh the todo list
-            document.getElementById('todo-form').reset(); // Clear form fields
+            fetchFiles(); // Refresh the file list
+            document.getElementById('file-form').reset(); // Clear the form
         })
-        .catch(error => console.error('Error creating todo:', error));
+        .catch(error => console.error('Error uploading file:', error));
     });
 </script>
 
