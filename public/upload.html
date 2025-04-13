@@ -54,26 +54,30 @@
         .form-group input {
             margin-bottom: 10px;
         }
-        .navbar-custom{
+
+        .navbar-custom {
             background-color: #0056b3;
             color: antiquewhite;
         }
-        .navbar-brand{
+
+        .navbar-brand {
             color: #f8f9fa;
         }
-        .navbar-custom .navbar-nav .nav-link  {
-            color: white; /* Set navbar link color to white */
+
+        .navbar-custom .navbar-nav .nav-link {
+            color: white;
         }
 
         .navbar-custom .navbar-nav .nav-link:hover {
-            color: #ffd700; /* Set a color for the links when hovered */
-            text-decoration: underline; /* Optional: Underline on hover */
+            color: #ffd700;
+            text-decoration: underline;
         }
 
         @media (max-width: 768px) {
             .card {
                 padding: 20px;
             }
+
             .table-responsive {
                 margin-top: 20px;
             }
@@ -81,6 +85,7 @@
     </style>
 </head>
 <body>
+
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
     <div class="container">
@@ -104,7 +109,7 @@
                 </li>
             </ul>
             <div class="form-group">
-                <input type="text" style="margin:0px 0px 0px 0px;" id="search" class="form-control" placeholder="Search documents...">
+                <input type="text" id="search" class="form-control" placeholder="Search documents...">
             </div>
         </div>
     </div>
@@ -165,13 +170,9 @@
 <div class="footer" style="text-align: center;">
     <p>Copyright © 2025 NUPAC</p>
     <p>Follow us on:
-       <!-- Social Media Links -->
-       <a class="btn btn-primary" style="background-color: #25d366;" href="https://whatsapp.com/channel/0029Vaq4PTdKLaHmfpuSU81P" role="button">
-        <i class="fab fa-whatsapp"></i></a>
-        <a class="btn btn-primary" style="background-color: #ac2bac;" href="https://www.instagram.com/nup_affiliated_colleges?igsh=M2U5ZjR1anJxYWxq" role="button">
-        <i class="fab fa-instagram"></i></a>
-        <a class="btn btn-primary" style="background-color: #3b5998;" href="https://facebook.com/groups/945505587706960/" role="button">
-        <i class="fab fa-facebook-f"></i></a>
+        <a class="btn btn-primary" style="background-color: #25d366;" href="https://whatsapp.com/channel/0029Vaq4PTdKLaHmfpuSU81P" role="button"><i class="fab fa-whatsapp"></i></a>
+        <a class="btn btn-primary" style="background-color: #ac2bac;" href="https://www.instagram.com/nup_affiliated_colleges?igsh=M2U5ZjR1anJxYWxq" role="button"><i class="fab fa-instagram"></i></a>
+        <a class="btn btn-primary" style="background-color: #3b5998;" href="https://facebook.com/groups/945505587706960/" role="button"><i class="fab fa-facebook-f"></i></a>
     </p>
 </div>
 
@@ -204,7 +205,10 @@
                     fileList.appendChild(row);
                 });
             })
-            .catch(error => console.error('Error fetching files:', error));
+            .catch(error => {
+                console.error('Error fetching files:', error);
+                alert('Failed to load files. Please try again later.');
+            });
     }
 
     // Handle form submission to upload a file
@@ -237,7 +241,10 @@
             fetchFiles(); // Refresh the file list
             document.getElementById('file-form').reset(); // Clear the form
         })
-        .catch(error => console.error('Error uploading file:', error));
+        .catch(error => {
+            console.error('Error uploading file:', error);
+            alert('Failed to upload file. Please try again later.');
+        });
     });
 </script>
 
