@@ -189,7 +189,12 @@
     // Function to fetch files from the API
     function fetchFiles() {
         fetch(apiBaseUrl)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
                 const files = data.files;
                 const fileList = document.getElementById('file-list');
@@ -235,7 +240,12 @@
             },
             body: JSON.stringify(newFile)
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to upload file');
+            }
+            return response.json();
+        })
         .then(data => {
             alert(data.message);
             fetchFiles(); // Refresh the file list
