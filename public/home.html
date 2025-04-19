@@ -17,6 +17,7 @@
             color: #333;
             margin: 0;
             padding: 0;
+            padding-top: 80px; /* Adjust this value to the height of your navbar */
         }
 
         h2, h3, h4, h5, h6 {
@@ -43,26 +44,21 @@
             padding: 20px;
         }
 
-        /* Adjust body padding-top to prevent content overlap with fixed navbar */
-        body {
-            padding-top: 80px; /* Adjust this value to the height of your navbar */
-        }
-
         .footer {
-        background-color: #005f8a; /*ntrast */
-        color: white;
-        padding: 6px 0;
-        text-align: center;
+            background-color: #005f8a;
+            color: white;
+            padding: 6px 0;
+            text-align: center;
         }
 
         a {
-            color: #ffcc00; /* Change link color for better visibility */
+            color: #ffcc00;
             text-decoration: none;
         }
 
         a:hover {
             text-decoration: underline;
-            color: #ffd700; /* Slightly different hover color */    
+            color: #ffd700;
         }
 
         .course-list {
@@ -72,7 +68,7 @@
         }
 
         .course-item {
-            background: white; /* White background for course items */
+            background: white;
             border: 1px solid #ddd;
             border-radius: 5px;
             padding: 20px;
@@ -82,11 +78,11 @@
         }
 
         .course-item h3 a {
-            color: #0274be; /* Ensure course item links are blue */
+            color: #0274be;
         }
 
         .course-item h3 a:hover {
-            color: #ffcc00; /* Gold color on hover for course item links */
+            color: #ffcc00;
         }
 
         .course-item h3 {
@@ -121,25 +117,26 @@
             background-color: #0d68ae;
         }
 
-        /* Navbar styling */
-        .navbar-custom{
+        .navbar-custom {
             background-color: #0056b3;
             position: fixed;
-            color: antiquewhite;
+            width: 100%;
+            z-index: 1000;
         }
-        .navbar-brand{
+
+        .navbar-brand {
             color: #f8f9fa;
         }
-        .navbar-custom .navbar-nav .nav-link  {
-            color: white; /* Set navbar link color to white */
+
+        .navbar-custom .navbar-nav .nav-link {
+            color: white;
         }
 
         .navbar-custom .navbar-nav .nav-link:hover {
-            color: #ffd700; /* Set a color for the links when hovered */
-            text-decoration: underline; /* Optional: Underline on hover */
+            color: #ffd700;
+            text-decoration: underline;
         }
 
-        /* Social Media Icons */
         .social-links a {
             margin: 0 10px;
             color: white;
@@ -150,10 +147,17 @@
             color: #ffd700;
         }
 
-        /* Media Queries for Responsiveness */
         @media (max-width: 768px) {
             .course-item {
                 flex: 1 1 100%;
+            }
+
+            .footer {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                z-index: 999;
             }
         }
     </style>
@@ -174,9 +178,9 @@
     <nav class="navbar navbar-expand-lg navbar-custom fixed-top" style="background-color: #007bff;">
         <div class="container">
             <a class="navbar-brand" href="../public/home.html">NUPAC</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <!-- Custom Emoji for Navbar Toggler -->
-                <span id="navbar-toggler-icon" class="navbar-toggler-icon">📖</span> <!-- Open book emoji -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span id="navbar-toggler-icon" class="navbar-toggler-icon">📖</span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
@@ -206,10 +210,6 @@
                     <h3><a href="../Programs/BSCS.html">BS Computer Science</a></h3>
                     <p>Empowering innovation through technology, one algorithm at a time.</p>
                 </div>
-                <!--<div class="course-item">
-                    <h3><a href="../Programs/BSZOOLOGY.html">BS Zoology</a></h3>
-                    <p>Exploring the wonders of wildlife and unlocking the secrets of the natural world.</p>
-                </div>-->
                 <div class="course-item">
                     <h3><a href="../Programs/BSURDU.html">BS Urdu</a></h3>
                     <p>Celebrating the richness of Urdu literature and cultural heritage.</p>
@@ -247,32 +247,28 @@
     </div>
 
     <!-- Footer -->
-    <div class="footer fixed-bottom">
+    <div class="footer">
         <p>Copyright © 2025 NUPAC</p>
         <p>Follow us on:
-            <div class="social-links">
-                <a class="btn btn-primary" style="background-color: #25d366;" href="https://whatsapp.com/channel/0029Vaq4PTdKLaHmfpuSU81P" role="button"><i class="fab fa-whatsapp"></i></a>
-                <a class="btn btn-primary" style="background-color: #ac2bac;" href="https://www.instagram.com/nup_affiliated_colleges?igsh=M2U5ZjR1anJxYWxq" role="button"><i class="fab fa-instagram"></i></a>
-                <a class="btn btn-primary" style="background-color: #3b5998;" href="https://facebook.com/groups/945505587706960/" role="button"><i class="fab fa-facebook-f"></i></a>
-            </div>
+        <div class="social-links">
+            <a class="btn btn-primary" style="background-color: #25d366;" href="https://whatsapp.com/channel/0029Vaq4PTdKLaHmfpuSU81P" role="button"><i class="fab fa-whatsapp"></i></a>
+            <a class="btn btn-primary" style="background-color: #ac2bac;" href="https://www.instagram.com/nup_affiliated_colleges?igsh=M2U5ZjR1anJxYWxq" role="button"><i class="fab fa-instagram"></i></a>
+            <a class="btn btn-primary" style="background-color: #3b5998;" href="https://facebook.com/groups/945505587706960/" role="button"><i class="fab fa-facebook-f"></i></a>
+        </div>
         </p>
     </div>
 
-    <!-- Bootstrap JS & Popper.js (optional, for dropdowns, modals, etc.) -->
+    <!-- Bootstrap JS & Popper.js -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    <!-- JavaScript for toggling the book emojis -->
+    <!-- JS for emoji toggle -->
     <script>
-        document.querySelector('.navbar-toggler').addEventListener('click', function() {
+        document.querySelector('.navbar-toggler').addEventListener('click', function () {
             const togglerIcon = document.getElementById('navbar-toggler-icon');
-            if (togglerIcon.textContent === '📖') {
-                togglerIcon.textContent = '📚';  // Closed book emoji
-            } else {
-                togglerIcon.textContent = '📖';  // Open book emoji
-            }
+            togglerIcon.textContent = togglerIcon.textContent === '📖' ? '📚' : '📖';
         });
     </script>
 </body>
-</html>
+    </html>
