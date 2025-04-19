@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html> 
+ <head>  
+    <title id="pageTitle"></title>  
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">  
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">  
+    <link rel="stylesheet" href="style.css">  
+</head>  
+<body>  
+    <nav class="navbar navbar-expand-lg navbar-custom" style="background-color: #007bff;">  
+        <div class="container">  
+            <a class="navbar-brand" href="../public/home.html">NUPAC</a>  
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">  
+                <span id="navbar-toggler-icon" class="navbar-toggler-icon">📖</span>  
+            </button>  
+            <div class="collapse navbar-collapse" id="navbarNav">  
+                <ul class="navbar-nav ml-auto">  
+                    <li class="nav-item active"><a class="nav-link" href="../upload.html">Upload</a></li>  
+                    <li class="nav-item"><a class="nav-link" href="../admin_login.html">Admin Login</a></li>  
+                    <li class="nav-item"><a class="nav-link" href="#">About</a></li>  
+                    <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>  
+                </ul>  
+            </div>  
+        </div>  
+    </nav><div id="content"></div>  <script>  
+    const program = "BS Islamic Studies";  
+    const semesters = {  
+        "1st Semester": [  
+            { title: "GEN-103 Application of ICT", link: "https://drive.google.com/drive/folders/1DS4uvQGDkMjO1hOOZezkCjvh-BT4p6od" },  
+            { title: "PSY 101 Introduction To Psychology", link: "https://drive.google.com/drive/folders/1U9BehtaiEri43x9E4LaKhiFPvu7IR1m3" },  
+            { title: "ISL-100 Uloom ul Quran Disciplinary", link: "https://drive.google.com/drive/folders/1O8uYCOnW2DgiC7SbIsCjpLeiPz4pP6KW" },
+            { title: "GEN-106 Islamic Studies", link: "https://drive.google.com/drive/folders/140noKQcPDDDMowxZUkjl2km_dvBK7TDw" },  
+            { title: "GEN-101 Functional English", link: "https://drive.google.com/drive/folders/1U9BehtaiEri43x9E4LaKhiFPvu7IR1m3" },  
+            { title: "ISL-101 History and compilation of Hadith", link: "https://drive.google.com/drive/folders/13o7FjMmagzxkt4FTTmhNkOK2p86SOmBo" }
+        ],  
+        "2nd Semester": [  
+            { title: "GEN-104 Expository Writing", link: "https://drive.google.com/drive/folders/1VRvks1tB9Zz8aLd3SeuY8Jjxhl3M2T9N" },  
+            { title: "POL 212 Political Science", link: "https://drive.google.com/drive/folders/1w-v8rqjGLPyZlFlOiKEjJn7-xXFZyQIF" },  
+            { title:"GEN-106 Islamic Studies ", link: "https://drive.google.com/drive/folders/140noKQcPDDDMowxZUkjl2km_dvBK7TDw" },  
+            { title: "ISL-102 Arabic Language-I", link: "https://drive.google.com/drive/folders/1dxSeglg4jE24esyOg5ElC7arsibzKqpp" },  
+            { title: "ISL-103 History of Fiqh", link: "https://drive.google.com/drive/folders/1eJ2ncjC0dyMEkLDI0UMMZb51Ai_alZRB" },  
+            { title: "GEN-102 Quantitative Reasoning-1", link: "https://drive.google.com/drive/folders/1-qX5d5adl7s8SK8cFFeUrF9ak7sEuDe3" }  
+        ]  
+    };  
+  
+    document.getElementById("pageTitle").innerText = `${program} - NUP Affiliated Colleges`;  
+    const contentDiv = document.getElementById("content");  
+      
+    Object.keys(semesters).forEach(semester => {  
+        let semesterHTML = `<h1>${program} ${semester}</h1>`;  
+        semesters[semester].forEach(subject => {  
+            semesterHTML += `  
+            <div class="folder-item" onclick="openFolder('${subject.link}')">  
+                <div class="folder-icon"></div>  
+                <div class="folder-title">${subject.title}</div>  
+                <a href="${subject.link}" class="download-button" target="_blank">Go to Folder</a>  
+            </div>`;  
+        });  
+        contentDiv.innerHTML += semesterHTML;  
+    });  
+  
+    function openFolder(url) {  
+        window.open(url, '_blank');  
+    }  
+</script>  
+
+<div class="footer">
+        <p>Copyright © 2025 NUPAC</p>
+        <p>Follow us on:
+           <!-- Social Media Links -->
+           <a data-mdb-ripple-init class="btn btn-primary" style="background-color: #25d366;" href="https://whatsapp.com/channel/0029Vaq4PTdKLaHmfpuSU81P" role="button">
+            <i class="fab fa-whatsapp"></i></a>
+            <a data-mdb-ripple-init class="btn btn-primary" style="background-color: #ac2bac;" href="https://www.instagram.com/nup_affiliated_colleges?igsh=M2U5ZjR1anJxYWxq" role="button">
+            <i class="fab fa-instagram"></i></a>
+            <a data-mdb-ripple-init class="btn btn-primary" style="background-color: #3b5998;" href="https://facebook.com/groups/945505587706960/" role="button">
+            <i class="fab fa-facebook-f"></i></a>
+        </p>
+    </div>
+    <!-- Bootstrap JS & Popper.js (optional, for dropdowns, modals, etc.) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
