@@ -26,6 +26,9 @@ app.get('/upload', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'upload.html'));
 });
 
+app.get('/uploads', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'upload.html'));
+});
 // Serve the Programs folder (for static content in that folder)
 app.use('/Programs', express.static(path.join(__dirname, 'Programs')));
 
