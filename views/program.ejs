@@ -42,7 +42,7 @@
           Go to Folder
         </a>
 
-        <% if (typeof user !== "undefined" && user === "admin") { %>
+        <% if (typeof user !== "undefined" && user === process.env.ADMIN_USERNAME) { %>
           <!-- Delete button only visible for admin -->
           <form action="/admin/subject/<%= subject._id %>/delete" method="POST" class="mt-3">
             <button 
