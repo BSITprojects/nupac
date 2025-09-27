@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Add Subject</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-5">
+  <h2>Add Subject</h2>
+  <form method="POST" action="/admin/subject/new">
+    <label>Course</label>
+    <select name="courseCode" class="form-control mb-2">
+      <% courses.forEach(c => { %>
+        <option value="<%= c.code %>"><%= c.name %></option>
+      <% }) %>
+    </select>
+    <input type="number" name="semester" placeholder="Semester" class="form-control mb-2" required>
+    <input type="text" name="subjectCode" placeholder="Subject Code" class="form-control mb-2" required>
+    <input type="text" name="subjectName" placeholder="Subject Name" class="form-control mb-2" required>
+    <input type="url" name="folderLink" placeholder="Google Drive Link" class="form-control mb-2" required>
+    <button type="submit" class="btn btn-primary">Add Subject</button>
+  </form>
+</body>
+</html>

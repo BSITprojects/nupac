@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Admin Dashboard</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+ <%- include('../partials/navbar') %>
+<body class="container mt-5">
+  <div class="h-20"></div> 
+  <h2 class="text-center font-bold text-3xl text-indigo-600 mb-2">Admin Dashboard</h2>
+  <div class="mb-3">
+    <a href="/admin/course/new" class="btn btn-success">+ Add Course</a>
+    <a href="/admin/subject/new" class="btn btn-info">+ Add Subject</a>
+    <a href="/admin/logout" class="btn btn-danger">Logout</a>
+  </div>
+
+  <h2 class="text-center font-bold text-3xl text-indigo-600 mb-2">Courses</h2>
+  <div class="accordion" id="courseAccordion">
+    <% courses.forEach((course, index) => { %>
+      <div class="card">
+        <div class="card-header" id="heading<%= index %>">
+          <h2 class="mb-0 d-flex justify-content-between align-items-center">
+            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse<%= index %>" aria-expanded="true" aria-controls="collapse<%= index %>">
+              <%= course.name %> (<%= course.code %>)
+            </button>
+            <form action="/admin/course/<%= course._id %>/delete" method="POST" style="display:inline;">
+              <button class="btn btn-danger btn-sm" type="submit" onclick="return confirm('Are you sure you want to delete this course? This will also remove its subjects.')">
+                Delete
+              </button>
+            </form>
+          </h2>
+        </div>
+
+        <div id="collapse<%= index %>" class="collapse" aria-labelledby="heading<%= index %>" data-parent="#courseAccordion">
+          <div class="card-body">
+            <p><strong>Description:</strong> <%= course.description %></p>
+            <p><a href="<%= course.pageUrl %>" target="_blank">View Course Page</a></p>
+
+            <h5>Subjects</h5>
+            <% if (course.subjects && course.subjects.length > 0) { %>
+              <ul class="list-group">
+                <% course.subjects.forEach(subject => { %>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <%= subject.subjectName %> (Sem <%= subject.semester %>)
+                    <form action="/admin/subject/<%= subject._id %>/delete" method="POST" style="display:inline;">
+                      <button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Delete this subject?')">Delete</button>
+                    </form>
+                  </li>
+                <% }) %>
+              </ul>
+            <% } else { %>
+              <p>No subjects added yet.</p>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

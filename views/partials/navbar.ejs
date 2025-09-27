@@ -1,0 +1,70 @@
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<head>
+    <title>Home - NUP Affiliated Colleges</title>
+    <link rel="canonical" href="">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Home - NUP Affiliated Colleges">
+    <meta property="og:description" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <meta name="twitter:card" content="summary_large_image">
+      <meta property="og:type" content="website" />
+  <meta property="og:locale" content="en_US" />
+
+  <link rel="icon" href="./nupac.jpg" sizes="32x32" />
+
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</head>
+<!-- Tailwind Navbar -->
+<nav class="fixed top-0 left-0 w-full bg-white text-indigo-600 shadow-md z-500">
+  <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-20">
+      <!-- Brand -->
+      <a href="/" class="text-2xl text-indigo-600 font-bold">NUPAC</a>
+
+      <!-- Desktop Links -->
+      <div class="hidden md:flex space-x-6">
+        <a href="/" class="hover:text-yellow-300">Home</a>
+        <a href="/admin/login" class="hover:text-yellow-300">Admin Login</a>
+        <a href="/about" class="hover:text-yellow-300">About</a>
+         <a href="/uploads" class="block hover:text-yellow-300">Uploads</a>
+      </div>
+
+      <!-- Mobile Hamburger -->
+      <div class="md:hidden">
+        <button id="menu-btn" class="focus:outline-none text-2xl">☰</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="hidden md:hidden bg-blue-700 px-4 pb-4 space-y-2">
+      <a href="/" class="block hover:text-yellow-300">Home</a>
+    <a href="/admin/login" class="block hover:text-yellow-300">Admin Login</a>
+    <a href="/about" class="block hover:text-yellow-300">About</a>
+    <a href="/uploads" class="block hover:text-yellow-300">Uploads</a>
+  </div>
+</nav>
+
+<script>
+  // Toggle mobile menu
+  document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById("menu-btn");
+    const menu = document.getElementById("mobile-menu");
+
+    btn.addEventListener("click", () => {
+      menu.classList.toggle("hidden");
+    });
+  });
+</script>

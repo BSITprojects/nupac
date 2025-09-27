@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Home - NUP Affiliated Colleges</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="font-sans antialiased">
+
+  <!-- Navbar -->
+  <%- include('partials/navbar') %>
+
+  <!-- Hero Section -->
+  <section class="min-h-screen flex flex-col-reverse lg:flex-row items-center justify-between px-6 lg:px-20 py-16 bg-gradient-to-r from-indigo-500 to-blue-600 text-white">
+    <div class="lg:w-1/2 space-y-6 text-center lg:text-left">
+      <h1 class="text-4xl md:text-5xl font-bold">
+        Empower Your Future with <span class="text-yellow-300">NUPAC</span>
+      </h1>
+      <p class="text-lg">Learn. Grow. Achieve. Unlock your potential with expert guidance.</p>
+    </div>
+    <div class="lg:w-1/2 mb-10 lg:mb-0">
+      <img src="https://img.freepik.com/free-photo/young-pretty-modern-muslim-woman-hijab-working-laptop-office-room-education-online_285396-9449.jpg" 
+           alt="NUPAC LMS" 
+           class="rounded-xl shadow-xl mx-auto w-full max-w-md" />
+    </div>
+  </section>
+
+  <!-- Why Choose Us -->
+  <section class="py-16 px-6 lg:px-20 bg-gray-50 text-center">
+    <h2 class="text-3xl text-indigo-600 font-bold mb-10">Why Choose NUPAC?</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bg-white shadow-lg rounded-lg p-6">
+        <h3 class="text-xl font-semibold mb-2">Flexible Learning</h3>
+        <p>Learn anytime, anywhere with our mobile-friendly platform.</p>
+      </div>
+      <div class="bg-white dark:bg-gray-900 shadow-lg rounded-lg p-6">
+        <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">Community Support</h3>
+        <p class="text-gray-700 dark:text-gray-300">
+          Connect with peers, share knowledge, and get help from the community anytime.
+        </p>
+      </div>
+      <div class="bg-white shadow-lg rounded-lg p-6">
+        <h3 class="text-xl font-semibold mb-2">Expert Mentors</h3>
+        <p>Learn from industry professionals and experienced educators.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Available Courses -->
+  <section class="py-16 px-6 lg:px-20">
+    <h2 class="text-center text-3xl font-bold text-indigo-600 mb-10">Available Courses</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <% courses.forEach(course => { %>
+        <a href="<%= course.pageUrl %>" class="block bg-white rounded-lg shadow-md hover:shadow-lg transition p-6">
+          <h5 class="text-xl font-semibold mb-2"><%= course.name %></h5>
+          <p class="text-gray-600"><%= course.description %></p>
+        </a>
+      <% }) %>
+    </div>
+  </section>
+
+<%- include('./partials/footer') %>
+</body>
+</html>

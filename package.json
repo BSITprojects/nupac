@@ -1,0 +1,20 @@
+{
+  "name": "portfolio-app",
+  "version": "1.0.0",
+  "description": "A portfolio website using Express and MongoDB",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-session": "^1.18.2",
+    "mongoose": "^6.13.8"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.14"
+  }
+}

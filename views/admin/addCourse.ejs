@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Add Course</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-5">
+  <h2>Add Course</h2>
+  <form method="POST" action="/admin/course/new">
+    <input type="text" name="code" placeholder="Course Code (e.g., BSCS)" class="form-control mb-2" required>
+    <input type="text" name="name" placeholder="Course Name" class="form-control mb-2" required>
+    <textarea name="description" placeholder="Description" class="form-control mb-2"></textarea>
+    <button type="submit" class="btn btn-primary">Add Course</button>
+  </form>
+</body>
+</html>
