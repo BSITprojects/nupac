@@ -35,8 +35,13 @@ mongoose.connect(process.env.MONGO_URI, {
 
 // Routes
 app.get("/", async (req, res) => {
-  const courses = await Course.find();
-  res.render("index", { courses });
+  try {
+    const courses = await Course.find();
+    res.render("index", { courses });
+  } catch (err) {
+    console.error("Error in /:", err);
+    res.status(500).send("Error loading home page");
+  }
 });
 app.get("/about", (req, res) => {
   res.render("about");
