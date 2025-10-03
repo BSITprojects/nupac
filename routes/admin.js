@@ -4,7 +4,7 @@ const Course = require("../models/Course.js");
 const Subject = require("../models/Subject");
 
 function isAuthenticated(req, res, next) {
-  if (req.session && req.session.user === process.env.ADMIN_USERNAME) {
+  if (req.session && req.session.user == process.env.ADMIN_USERNAME) {
     return next();
   }
   res.redirect("/admin/login");
