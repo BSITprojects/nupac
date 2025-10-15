@@ -7,23 +7,33 @@
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="font-sans antialiased">
 
   <!-- Navbar -->
   <%- include('partials/navbar') %>
 
   <!-- Hero Section -->
-  <section class="min-h-screen flex flex-col-reverse lg:flex-row items-center justify-between px-6 lg:px-20 py-16 bg-gradient-to-r from-indigo-500 to-blue-600 text-white">
+  <section class="min-h-screen flex flex-col justify-start items-center px-6 py-16 lg:px-20 lg:py-16 bg-gradient-to-r from-blue-500 to-blue-900 text-white lg:flex-row lg:justify-between lg:items-center">
+    
+    <!-- Left side: Text -->
     <div class="lg:w-1/2 space-y-6 text-center lg:text-left">
-      <h1 class="text-4xl md:text-5xl font-bold">
+      <h1 class="text-4xl sm:text-5xl font-bold">
         Empower Your Future with <span class="text-yellow-300">NUPAC</span>
       </h1>
       <p class="text-lg">Learn. Grow. Achieve. Unlock your potential with expert guidance.</p>
+      <a href="#courses" class="inline-block bg-yellow-300 hover:bg-yellow-400  font-bold text-black py-3 px-6 rounded-lg transition">
+        Explore Courses
+      </a>
     </div>
-    <div class="lg:w-1/2 mb-10 lg:mb-0">
-      <img src="https://img.freepik.com/free-photo/young-pretty-modern-muslim-woman-hijab-working-laptop-office-room-education-online_285396-9449.jpg" 
-           alt="NUPAC LMS" 
-           class="rounded-xl shadow-xl mx-auto w-full max-w-md" />
+
+    <!-- Right side: Image -->
+    <div class="lg:w-1/2 mt-12 lg:mt-0 mb-10 lg:mb-0">
+      <img 
+        src="https://img.freepik.com/free-photo/young-pretty-modern-muslim-woman-hijab-working-laptop-office-room-education-online_285396-9449.jpg" 
+        alt="NUPAC LMS" 
+        class="rounded-xl shadow-xl mx-auto w-full max-w-md"
+      />
     </div>
   </section>
 
@@ -49,7 +59,7 @@
   </section>
 
   <!-- Available Courses -->
-  <section class="py-16 px-6 lg:px-20">
+  <section class="py-16 px-6 lg:px-20" id="courses">
     <h2 class="text-center text-3xl font-bold text-indigo-600 mb-10">Available Courses</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <% courses.forEach(course => { %>
@@ -61,6 +71,8 @@
     </div>
   </section>
 
-<%- include('./partials/footer') %>
+  <!-- Footer -->
+  <%- include('partials/footer') %>
+
 </body>
 </html>
